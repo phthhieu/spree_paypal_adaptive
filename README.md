@@ -1,9 +1,9 @@
 SpreePaypalAdaptive
 ===================
 
-This is extension for [Spree MarketPlace](https://github.com/JDutil/spree_marketplace).
+This is extension for [Spree MarketPlace](https://github.com/JDutil/spree_marketplace)
 
-It's uses [Adaptive Payments SDK](https://github.com/paypal/adaptivepayments-sdk-ruby)
+It is uses [Adaptive Payments SDK](https://github.com/paypal/adaptivepayments-sdk-ruby)
 
 This extension is a remade of [Better Spree PayPal Express](https://github.com/spree-contrib/better_spree_paypal_express) extension
 
@@ -47,4 +47,4 @@ ToDo
 * Check PayPal Email presence
 * Check count of receivers in Order (up to 6)
 * Check zero amount
-* Fix JS code (?) if used simultaneously with Better Spree Paypal)
+* Fix JS code (?) if used simultaneously with Better Spree Paypal
