@@ -32,6 +32,17 @@ In Spree create a new payment method with "Spree::Gateway::PayPalAdaptive" as th
 
 Fill Paypal Email fields for suppliers.
 
+Refund note
+-------
+
+Receiver must set grant permission for pay refund: 
+- in receiver PayPal account goto Profile -> My selling tools -> API access -> Grant API permission
+- in textbox "Third Party Permission Username" enter API Credentials Username (for example test-facilitator_api1.example.com) and click Lookup button
+- enable checkbox for "Issue a refund for a specific transaction" and click Add button
+
+[Thanx to](http://stackoverflow.com/a/12542978/4593411).
+
+
 Testing
 -------
 

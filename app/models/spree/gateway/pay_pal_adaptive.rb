@@ -56,10 +56,8 @@ module Spree
       refund_transaction = provider.build_refund({
         :currencyCode => payment.currency,
         :payKey => payment.source.pay_key,
-        :receiverList => {
-          :receiver => [{
-            :amount => amount,
-            :email => "" }] }
+        :requestEnvelope => { 
+          :errorLanguage => "en_US"}
         })
 
       refund_response = provider.refund(refund_transaction)
