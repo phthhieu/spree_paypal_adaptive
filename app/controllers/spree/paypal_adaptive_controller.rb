@@ -28,8 +28,7 @@ module Spree
       order = current_order || raise(ActiveRecord::RecordNotFound)
       order.payments.create!({
         :source => Spree::PaypalAdaptiveCheckout.create({
-          :pay_key => params[:payKey],
-          :account_id => params[:accountId]
+          :pay_key => params[:payKey]
         }),
         :amount => order.total,
         :payment_method => payment_method
