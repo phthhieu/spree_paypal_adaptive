@@ -2,11 +2,17 @@
 
 SpreePaypalAdaptive = {
   hideSettings: function(paymentMethod) {
-    if (SpreePaypalAdaptive.paymentMethodID && paymentMethod.val() == SpreePaypalAdaptive.paymentMethodID) {
+// if used simultaneously with Better Spree Paypal
+	if (typeof SpreePaypalExpress !== 'undefined') {
+		ppExpress = (SpreePaypalExpress.paymentMethodID && (paymentMethod.val() == SpreePaypalExpress.paymentMethodID))
+	} else {
+		ppExpress = false
+	}
+    if ((SpreePaypalAdaptive.paymentMethodID && (paymentMethod.val() == SpreePaypalAdaptive.paymentMethodID)) || ppExpress) {
       $('.payment-method-settings').children().hide();
       $('#payment_amount').prop('disabled', 'disabled');
       $('button[type="submit"]').prop('disabled', 'disabled');
-      $('#paypal-adaptive-warning').show();
+      $('#paypal-adaptive-warning, #payment_method_'+SpreePaypalAdaptive.paymentMethodID).show();
     } else if (SpreePaypalAdaptive.paymentMethodID) {
       $('.payment-method-settings').children().show();
       $('button[type=submit]').prop('disabled', '');
