@@ -13,7 +13,7 @@ Installation
 Add spree_paypal_adaptive to your Gemfile:
 
 ```ruby
-gem 'spree_paypal_adaptive', github: 'lemboy/spree_paypal_adaptive'
+gem 'spree_paypal_adaptive', github: 'lemboy/spree_paypal_adaptive', branch: '0-1-beta'
 ```
 
 Bundle your dependencies and run the installation generator:
