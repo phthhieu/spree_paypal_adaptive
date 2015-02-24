@@ -5,8 +5,13 @@ module Spree
     def adaptive
       order = current_order || raise(ActiveRecord::RecordNotFound)
       items = order.shipments.map(&method(:shipment))
-      items = request_details(items, order)
 
+      # Check if item amount <> 0 (required by PayPal)
+      items.reject! do |item|
+        item[:amount].zero?
+      end
+      items = request_details(items, order)
+    
       pay = provider.build_pay(items)
 
       begin

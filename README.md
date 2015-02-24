@@ -57,5 +57,4 @@ ToDo
 * Items detail in PayPal
 * Check PayPal Email presence
 * Check count of receivers in Order (up to 6)
-* Check zero amount
 
