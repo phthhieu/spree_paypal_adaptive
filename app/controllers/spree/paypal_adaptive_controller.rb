@@ -15,7 +15,7 @@ module Spree
       pay = provider.build_pay(items)
 
       begin
-      response = provider.pay(pay) 
+        response = provider.pay(pay) 
         if response.success?
           redirect_to provider.payment_url(response)
         else
