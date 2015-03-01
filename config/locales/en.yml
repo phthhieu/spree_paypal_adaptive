@@ -7,16 +7,21 @@ en:
       no_payment_via_admin_backend: "You cannot charge PayPal accounts through the admin backend at this time."
       transaction: "PayPal Adaptive Transaction"
       pay_key: "Pay Key"
-      transaction_id: "Correlation ID"
+      transaction_id: "Transaction ID"
       token: "Token"
       refund: "Refund"
       refund_amount: "Amount"
       original_amount: "Original amount: %{amount}"
       refund_successful: "PayPal refund successful"
       refund_unsuccessful: "PayPal refund unsuccessful"
+      reveiver_email: "Receiver email"
       actions:
         refund: "Refund"
       flash:
         cancel: "Don't want to use PayPal? No problems."
         connection_failed: "Could not connect to PayPal."
         generic_error: "PayPal failed. %{reasons}"
+      payment_state:
+        refunded: "Refunded"
+        completed: "Complete"
+        complete: "Complete"

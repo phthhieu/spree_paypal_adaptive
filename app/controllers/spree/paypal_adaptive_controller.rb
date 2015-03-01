@@ -30,14 +30,25 @@ module Spree
     end
 
     def confirm
+      payment_details = provider.build_payment_details({ :payKey => params[:payKey] })
+      payment_details_response = provider.payment_details(payment_details)
+
       order = current_order || raise(ActiveRecord::RecordNotFound)
-      order.payments.create!({
-        :source => Spree::PaypalAdaptiveCheckout.create({
-          :pay_key => params[:payKey]
-        }),
-        :amount => order.total,
-        :payment_method => payment_method
-      })
+
+      if payment_details_response.success?
+        payment_details_response.paymentInfoList.paymentInfo.each do |payment_item| 
+          order.payments.create!({
+            :source => Spree::PaypalAdaptiveCheckout.create({
+              :pay_key => params[:payKey],
+              :receiver_email => payment_item.receiver.email,
+              :transaction_id => payment_item.transactionId
+            }),
+            :amount => payment_item.receiver.amount,
+            :payment_method => payment_method
+          })
+        end
+      end
+
       order.next
       if order.complete?
         flash.notice = Spree.t(:order_processed_successfully)
@@ -68,7 +79,7 @@ module Spree
     def shipment(item)
       amount = 0
       item.line_items.each do |line_item|
-        amount += line_item.price
+        amount += line_item.price * line_item.quantity
         line_item.adjustments.each { |adjustment| amount += adjustment.amount }            
       end
       {
@@ -76,6 +87,18 @@ module Spree
         :amount => item.cost + amount,
         :paymentType => "GOODS",
         :invoiceId => item.order.number 
+      }
+    end
+
+    def payment_attributes(item)
+      {
+         :source => Spree::PaypalAdaptiveCheckout.create({
+            :pay_key => item.payKey,
+            :receiver_email => item.receiver.email,
+            :transaction_id => item.transactionId
+          }),
+          :amount => item.receiver.amount,
+          :payment_method => payment_method
       }
     end
 

@@ -6,6 +6,12 @@
       <dl>
         <dt><%= Spree.t(:pay_key, :scope => :paypal_adaptive) %>:</dt>
         <dd><%= payment.source.pay_key %></dd>
+
+        <dt><%= Spree.t(:transaction_id, :scope => :paypal_adaptive) %>:</dt>
+        <dd><%= payment.source.transaction_id %></dd>
+
+        <dt><%= Spree.t(:receiver_email, :scope => :paypal_adaptive) %>:</dt>
+        <dd><%= payment.source.receiver_email %></dd>
       </dl>
     </div>
 
@@ -20,8 +26,8 @@
           <dt><%= Spree.t(:refunded_at, :scope => :paypal) %>:</dt>
           <dd><%= pretty_time(payment.source.refunded_at) %></dd>
 
-          <dt><%= Spree.t(:refund_correlation_id, :scope => :paypal_adaptive) %>:</dt>
-          <dd><%= payment.source.refund_correlation_id %></dd>
+          <dt><%= Spree.t(:refund_transaction_id, :scope => :paypal_adaptive) %>:</dt>
+          <dd><%= payment.source.refund_transaction_id %></dd>
         </dl>
       </div>
     <% end %>

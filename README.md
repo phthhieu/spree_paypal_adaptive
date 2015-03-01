@@ -1,19 +1,22 @@
 SpreePaypalAdaptive
 ===================
 
-This is extension for [Spree MarketPlace](https://github.com/JDutil/spree_marketplace)
+This is extension for [Spree Drop Ship](https://github.com/spree-contrib/spree_drop_ship), 
+which makes possible a few payments by order to several suppliers. 
+See [PayPal Parallel Payments](https://developer.paypal.com/docs/classic/adaptive-payments/integration-guide/APIntro/) for further details.
 
 It is uses [Adaptive Payments SDK](https://github.com/paypal/adaptivepayments-sdk-ruby)
 
-This extension is a remake of [Better Spree PayPal Express](https://github.com/spree-contrib/better_spree_paypal_express) extension
+Spree Paypal Adaptive is a remake of [Better Spree PayPal Express](https://github.com/spree-contrib/better_spree_paypal_express) extension
 
 Installation
 ------------
+Install spree_paypal_adaptive after you have install Spree Drop Ship.
 
 Add spree_paypal_adaptive to your Gemfile:
 
 ```ruby
-gem 'spree_paypal_adaptive', github: 'lemboy/spree_paypal_adaptive', branch: '0-1-beta'
+gem 'spree_paypal_adaptive', github: 'lemboy/spree_paypal_adaptive'
 ```
 
 Bundle your dependencies and run the installation generator:
@@ -34,6 +37,7 @@ Fill Paypal Email fields for suppliers.
 
 Refund note
 -------
+You have the ability to refund one of several parallel payments on order. You can refund only whole pay amount by this single pay.
 
 Receiver must set grant permission for pay refund: 
 - in receiver PayPal account goto Profile -> My selling tools -> API access -> Grant API permission
@@ -51,7 +55,7 @@ Not yet implemented.
 ToDo
 -------
 
-* Refund by single receiver
+* Tests
 * Order Adjustments
 * Chained pays
 * Items detail in PayPal

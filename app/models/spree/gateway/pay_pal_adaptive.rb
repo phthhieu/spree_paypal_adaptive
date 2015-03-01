@@ -6,9 +6,6 @@ module Spree
     preference :password, :string
     preference :signature, :string
     preference :server, :string, default: 'sandbox'
-    preference :solution, :string, default: 'Mark'
-    preference :landing_page, :string, default: 'Billing'
-    preference :logourl, :string, default: ''
 
     def supports?(source)
       true
@@ -57,7 +54,11 @@ module Spree
         :currencyCode => payment.currency,
         :payKey => payment.source.pay_key,
         :requestEnvelope => { 
-          :errorLanguage => "en_US"}
+          :errorLanguage => "en_US"},
+        :receiverList => {
+          :receiver => [{
+            :amount => amount,
+            :email => payment.source.receiver_email }]}
         })
 
       refund_response = provider.refund(refund_transaction)
@@ -65,7 +66,7 @@ module Spree
       if refund_response.success?
         payment.source.update_attributes({
           :refunded_at => Time.now,
-          :refund_correlation_id => refund_response.responseEnvelope.correlationId,
+          :refund_transaction_id => refund_response.refundInfoList.refundInfo.first.encryptedRefundTransactionId,
           :state => "refunded",
           :refund_type => refund_type
         })
@@ -75,7 +76,7 @@ module Spree
           :source => payment,
           :payment_method => payment.payment_method,
           :amount => amount.to_f.abs * -1,
-          :response_code => refund_response.responseEnvelope.correlationId,
+          :response_code => refund_response.refundInfoList.refundInfo.first.encryptedRefundTransactionId,
           :state => 'completed'
         )
       end

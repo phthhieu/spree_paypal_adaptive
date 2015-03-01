@@ -1,0 +1,8 @@
+@import 'spree/backend/globals/variables';
+
+$color-ste-refunded-bg:     $color-notice !default;
+$color-ste-refunded-text:   $color-1 !default;
+
+$states: append($states, refunded, comma);
+$states-bg-colors: append($states-bg-colors, $color-ste-refunded-bg, comma);
+$states-text-colors: append($states-text-colors, $color-ste-refunded-text, comma);
