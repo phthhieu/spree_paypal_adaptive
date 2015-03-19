@@ -11,15 +11,16 @@ module Spree
         item[:amount].zero?
       end
       items = request_details(items, order)
-    
-      pay = provider.build_pay(items)
 
+      pay = provider.build_pay(items)
       begin
-      response = provider.pay(pay) 
+      response = provider.pay(pay)
         if response.success?
-          redirect_to provider.payment_url(response)
+          render json: {
+            paykey: response.payKey
+          }.to_json
         else
-          flash[:error] = Spree.t('flash.generic_error', :scope => 'paypal_adaptive', 
+          flash[:error] = Spree.t('flash.generic_error', :scope => 'paypal_adaptive',
                     :reasons => response.error[0].message)
           redirect_to checkout_state_path(:payment)
         end
@@ -36,7 +37,7 @@ module Spree
       order = current_order || raise(ActiveRecord::RecordNotFound)
 
       if payment_details_response.success?
-        payment_details_response.paymentInfoList.paymentInfo.each do |payment_item| 
+        payment_details_response.paymentInfoList.paymentInfo.each do |payment_item|
           order.payments.create!({
             :source => Spree::PaypalAdaptiveCheckout.create({
               :pay_key => params[:payKey],
@@ -59,11 +60,11 @@ module Spree
         redirect_to checkout_state_path(order.state)
       end
     end
-    
+
     def cancel
       flash[:notice] = Spree.t('flash.cancel', :scope => 'paypal_adaptive')
       order = current_order || raise(ActiveRecord::RecordNotFound)
-      redirect_to checkout_state_path(order.state, paypal_adaptive_cancel_token: params[:token])
+      render :close_flow, layout: false
     end
 
     private
@@ -80,13 +81,13 @@ module Spree
       amount = 0
       item.line_items.each do |line_item|
         amount += line_item.price * line_item.quantity
-        line_item.adjustments.each { |adjustment| amount += adjustment.amount }            
+        line_item.adjustments.each { |adjustment| amount += adjustment.amount }
       end
       {
-        :email => item.supplier.paypal_email,
-        :amount => item.cost + amount,
+        :email => ENV['jml_paypal_email'],
+        :amount => item.order.total,
         :paymentType => "GOODS",
-        :invoiceId => item.order.number 
+        :invoiceId => item.order.number
       }
     end
 
@@ -115,10 +116,10 @@ module Spree
           }
       }
     end
-  
+
     def completion_route(order)
       order_path(order, :token => order.guest_token)
     end
-  
+
   end
 end
