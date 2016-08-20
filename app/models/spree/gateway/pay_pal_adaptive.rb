@@ -1,6 +1,8 @@
 require 'paypal-sdk-adaptivepayments'
+
 module Spree
   class Gateway::PayPalAdaptive < Gateway
+    preference :primary_email, :string
     preference :app_id, :string
     preference :login, :string
     preference :password, :string
@@ -46,14 +48,14 @@ module Spree
         def authorization; nil; end
       end.new
     end
-  
+
     def refund(payment, amount)
       refund_type = payment.amount == amount.to_f ? "Full" : "Partial"
 
       refund_transaction = provider.build_refund({
         :currencyCode => payment.currency,
         :payKey => payment.source.pay_key,
-        :requestEnvelope => { 
+        :requestEnvelope => {
           :errorLanguage => "en_US"},
         :receiverList => {
           :receiver => [{
@@ -82,6 +84,5 @@ module Spree
       end
       refund_response
     end
-    
   end
 end

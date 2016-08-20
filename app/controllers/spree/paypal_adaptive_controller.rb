@@ -1,7 +1,5 @@
 module Spree
   class PaypalAdaptiveController < StoreController
-    ssl_allowed
-
     def adaptive
       order = current_order || raise(ActiveRecord::RecordNotFound)
       items = order.shipments.map(&method(:shipment))
@@ -76,6 +74,10 @@ module Spree
       payment_method.provider
     end
 
+    def primary_email
+      payment_method.preferences[:primary_email]
+    end
+
     def shipment(item)
       amount = 0
       item.line_items.each do |line_item|
@@ -83,7 +85,7 @@ module Spree
         line_item.adjustments.each { |adjustment| amount += adjustment.amount }
       end
       {
-        :email => ENV['jml_paypal_email'],
+        :email => primary_email,
         :amount => item.order.total,
         :paymentType => "GOODS",
         :invoiceId => item.order.number
@@ -105,9 +107,8 @@ module Spree
     def request_details(items, order)
       {
           :currencyCode => order.currency,
-          :actionType => "PAY",
-          :feesPayer => "SENDER",
-          :reverseAllParallelPaymentsOnError => true,
+          :actionType => "PAY_PRIMARY",
+          :feesPayer => "EACHRECEIVER",
           :returnUrl => confirm_paypal_adaptive_url(:payment_method_id => params[:payment_method_id], :utm_nooverride => 1)+"&payKey=${payKey}",
           :cancelUrl =>  cancel_paypal_adaptive_url,
           :receiverList => {
@@ -119,6 +120,5 @@ module Spree
     def completion_route(order)
       order_path(order, :token => order.guest_token)
     end
-
   end
 end

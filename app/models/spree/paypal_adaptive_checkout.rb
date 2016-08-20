@@ -1,4 +1,4 @@
 module Spree
-  class PaypalAdaptiveCheckout < ActiveRecord::Base    
+  class PaypalAdaptiveCheckout < ActiveRecord::Base
   end
 end
